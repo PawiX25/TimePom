@@ -65,8 +65,8 @@ function updateDurations() {
 
 function startTimer() {
     if (!isRunning) {
-        updateDurations(); 
-        document.getElementById('input-container').classList.add('hidden'); 
+        updateDurations();
+        document.getElementById('input-container').classList.add('hidden');
         interval = setInterval(() => {
             timeRemaining--;
             updateTimer();
@@ -88,7 +88,7 @@ function resetTimer() {
     document.body.classList.remove('bg-break');
     updateVisualFeedback();
     updateTimer();
-    document.getElementById('input-container').classList.remove('hidden'); 
+    document.getElementById('input-container').classList.remove('hidden');
 }
 
 function renderTasks() {
@@ -96,8 +96,8 @@ function renderTasks() {
     taskList.innerHTML = ''; 
     tasks.forEach((task, index) => {
         const li = document.createElement('li');
-        li.className = 'flex items-center justify-between py-1';
-        li.innerHTML = `${task} <button class="bg-red-500 text-white py-1 px-2 rounded ml-2 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="removeTask(${index})">Remove</button>`;
+        li.className = 'flex items-center justify-between py-2 text-gray-800';
+        li.innerHTML = `${task} <button class="bg-red-500 text-white py-1 px-2 rounded-lg ml-2 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="removeTask(${index})">Remove</button>`;
         taskList.appendChild(li);
     });
 }
