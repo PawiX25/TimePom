@@ -22,6 +22,13 @@ function updateVisualFeedback() {
     }
 }
 
+function updateProgressBar() {
+    const progressBar = document.getElementById('progress-bar');
+    const totalDuration = onBreak ? breakDuration : workDuration;
+    const progress = ((totalDuration - timeRemaining) / totalDuration) * 100;
+    progressBar.style.width = `${progress}%`;
+}
+
 function updateTimer() {
     const minutesElem = document.getElementById('minutes');
     const secondsElem = document.getElementById('seconds');
@@ -37,6 +44,8 @@ function updateTimer() {
         updateVisualFeedback();
         playAlert();
     }
+
+    updateProgressBar();
 }
 
 function updateDurations() {
