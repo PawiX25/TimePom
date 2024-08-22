@@ -2,8 +2,11 @@ let isRunning = false;
 let interval;
 let workDuration = 25 * 60;
 let breakDuration = 5 * 60;
+let longBreakDuration = 15 * 60;
 let timeRemaining = workDuration;
 let onBreak = false;
+let sessionsCompleted = 0;
+const sessionsBeforeLongBreak = 4;
 let tasks = [];
 
 function formatTime(seconds) {
@@ -25,7 +28,7 @@ function updateVisualFeedback() {
 
 function updateProgressBar() {
     const progressBar = document.getElementById('progress-bar');
-    const totalDuration = onBreak ? breakDuration : workDuration;
+    const totalDuration = onBreak ? (sessionsCompleted >= sessionsBeforeLongBreak ? longBreakDuration : breakDuration) : workDuration;
     const progress = ((totalDuration - timeRemaining) / totalDuration) * 100;
     progressBar.style.width = `${progress}%`;
 }
@@ -39,9 +42,22 @@ function updateTimer() {
     if (timeRemaining <= 0) {
         clearInterval(interval);
         isRunning = false;
-        const sessionType = onBreak ? 'Work Session' : 'Break Time!';
-        timeRemaining = onBreak ? workDuration : breakDuration;
-        onBreak = !onBreak;
+
+        if (!onBreak) {
+            sessionsCompleted++;
+            if (sessionsCompleted >= sessionsBeforeLongBreak) {
+                timeRemaining = longBreakDuration;
+                sessionsCompleted = 0; // reset after long break
+            } else {
+                timeRemaining = breakDuration;
+            }
+            onBreak = true;
+        } else {
+            timeRemaining = workDuration;
+            onBreak = false;
+        }
+
+        const sessionType = onBreak ? 'Break Time!' : 'Work Session';
         document.getElementById('status').textContent = sessionType;
         updateVisualFeedback();
         showNotification('Session Complete', sessionType);
