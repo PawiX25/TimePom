@@ -1,7 +1,7 @@
 let isRunning = false;
 let interval;
-const workDuration = 25 * 60;
-const breakDuration = 5 * 60;
+let workDuration = 25 * 60;
+let breakDuration = 5 * 60;
 let timeRemaining = workDuration;
 let onBreak = false;
 
@@ -39,8 +39,24 @@ function updateTimer() {
     }
 }
 
+function updateDurations() {
+    const workInput = document.getElementById('work-time').value;
+    const breakInput = document.getElementById('break-time').value;
+    workDuration = parseInt(workInput) * 60;
+    breakDuration = parseInt(breakInput) * 60;
+    if (!onBreak) {
+        timeRemaining = workDuration;
+        updateTimer();
+    } else {
+        timeRemaining = breakDuration;
+        updateTimer();
+    }
+}
+
 function startTimer() {
     if (!isRunning) {
+        updateDurations(); 
+        document.getElementById('input-container').classList.add('hidden'); 
         interval = setInterval(() => {
             timeRemaining--;
             updateTimer();
@@ -62,6 +78,7 @@ function resetTimer() {
     document.body.classList.remove('bg-break');
     updateVisualFeedback();
     updateTimer();
+    document.getElementById('input-container').classList.remove('hidden'); 
 }
 
 document.getElementById('start-btn').addEventListener('click', startTimer);

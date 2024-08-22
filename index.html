@@ -17,6 +17,10 @@
         .bg-break {
             background-color: #e0f7fa;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-work flex items-center justify-center h-screen">
@@ -25,10 +29,20 @@
         <div id="timer" class="text-6xl font-mono mb-6">
             <span id="minutes">25</span>:<span id="seconds">00</span>
         </div>
-        <div class="space-x-4">
+        <div class="space-x-4 mb-6">
             <button id="start-btn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600" aria-label="Start Timer">Start</button>
             <button id="pause-btn" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600" aria-label="Pause Timer">Pause</button>
             <button id="reset-btn" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" aria-label="Reset Timer">Reset</button>
+        </div>
+        <div id="input-container" class="mb-6">
+            <div class="mb-6">
+                <label for="work-time" class="block text-lg font-medium mb-2">Work Time (minutes):</label>
+                <input type="number" id="work-time" value="25" class="border border-gray-300 p-2 rounded" aria-label="Work Time">
+            </div>
+            <div class="mb-6">
+                <label for="break-time" class="block text-lg font-medium mb-2">Break Time (minutes):</label>
+                <input type="number" id="break-time" value="5" class="border border-gray-300 p-2 rounded" aria-label="Break Time">
+            </div>
         </div>
         <div id="status" class="mt-4 text-xl text-gray-700" aria-live="polite">Work Session</div>
     </div>
