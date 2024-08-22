@@ -52,6 +52,12 @@ function updateTimer() {
 function updateDurations() {
     const workInput = document.getElementById('work-time').value;
     const breakInput = document.getElementById('break-time').value;
+
+    if (isNaN(workInput) || isNaN(breakInput) || workInput <= 0 || breakInput <= 0) {
+        showError('Please enter valid positive numbers for both work and break times.');
+        return;
+    }
+
     workDuration = parseInt(workInput) * 60;
     breakDuration = parseInt(breakInput) * 60;
     if (!onBreak) {
@@ -61,6 +67,20 @@ function updateDurations() {
         timeRemaining = breakDuration;
         updateTimer();
     }
+
+    clearError();
+}
+
+function showError(message) {
+    const errorElem = document.getElementById('error-message');
+    errorElem.textContent = message;
+    errorElem.classList.remove('hidden');
+}
+
+function clearError() {
+    const errorElem = document.getElementById('error-message');
+    errorElem.textContent = '';
+    errorElem.classList.add('hidden');
 }
 
 function startTimer() {
@@ -89,6 +109,7 @@ function resetTimer() {
     updateVisualFeedback();
     updateTimer();
     document.getElementById('input-container').classList.remove('hidden');
+    clearError();
 }
 
 function renderTasks() {
