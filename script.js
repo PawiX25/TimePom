@@ -39,10 +39,12 @@ function updateTimer() {
     if (timeRemaining <= 0) {
         clearInterval(interval);
         isRunning = false;
+        const sessionType = onBreak ? 'Work Session' : 'Break Time!';
         timeRemaining = onBreak ? workDuration : breakDuration;
         onBreak = !onBreak;
-        document.getElementById('status').textContent = onBreak ? 'Break Time!' : 'Work Session';
+        document.getElementById('status').textContent = sessionType;
         updateVisualFeedback();
+        showNotification('Session Complete', sessionType);
     }
 
     updateProgressBar();
@@ -156,6 +158,21 @@ function removeTask(index) {
     tasks.splice(index, 1);
     renderTasks();
 }
+
+
+function showNotification(title, message) {
+    if (Notification.permission === 'granted') {
+        new Notification(title, {
+            body: message,
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
+});
 
 document.getElementById('start-btn').addEventListener('click', startTimer);
 document.getElementById('pause-btn').addEventListener('click', pauseTimer);
