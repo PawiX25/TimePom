@@ -4,6 +4,7 @@ let workDuration = 25 * 60;
 let breakDuration = 5 * 60;
 let timeRemaining = workDuration;
 let onBreak = false;
+let tasks = [];
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -90,8 +91,36 @@ function resetTimer() {
     document.getElementById('input-container').classList.remove('hidden'); 
 }
 
+function renderTasks() {
+    const taskList = document.getElementById('task-list');
+    taskList.innerHTML = ''; 
+    tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center justify-between py-1';
+        li.innerHTML = `${task} <button class="bg-red-500 text-white py-1 px-2 rounded ml-2 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="removeTask(${index})">Remove</button>`;
+        taskList.appendChild(li);
+    });
+}
+
+function addTask() {
+    const taskInput = document.getElementById('task-input');
+    const task = taskInput.value.trim();
+    if (task) {
+        tasks.push(task);
+        taskInput.value = '';
+        renderTasks();
+    }
+}
+
+function removeTask(index) {
+    tasks.splice(index, 1);
+    renderTasks();
+}
+
 document.getElementById('start-btn').addEventListener('click', startTimer);
 document.getElementById('pause-btn').addEventListener('click', pauseTimer);
 document.getElementById('reset-btn').addEventListener('click', resetTimer);
+document.getElementById('add-task-btn').addEventListener('click', addTask);
+
 
 updateTimer();
