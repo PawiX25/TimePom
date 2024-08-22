@@ -43,7 +43,6 @@ function updateTimer() {
         onBreak = !onBreak;
         document.getElementById('status').textContent = onBreak ? 'Break Time!' : 'Work Session';
         updateVisualFeedback();
-        playAlert();
     }
 
     updateProgressBar();
@@ -118,17 +117,37 @@ function renderTasks() {
     tasks.forEach((task, index) => {
         const li = document.createElement('li');
         li.className = 'flex items-center justify-between py-2 text-gray-800';
-        li.innerHTML = `${task} <button class="bg-red-500 text-white py-1 px-2 rounded-lg ml-2 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="removeTask(${index})">Remove</button>`;
+        li.innerHTML = `
+            <span id="task-${index}" ${task.completed ? 'style="text-decoration: line-through;"' : ''}>${task.text}</span>
+            <div>
+                <button class="bg-green-500 text-white py-1 px-2 rounded-lg ml-2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" onclick="markTaskComplete(${index})">Complete</button>
+                <button class="bg-blue-500 text-white py-1 px-2 rounded-lg ml-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onclick="editTask(${index})">Edit</button>
+                <button class="bg-red-500 text-white py-1 px-2 rounded-lg ml-2 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="removeTask(${index})">Remove</button>
+            </div>
+        `;
         taskList.appendChild(li);
     });
 }
 
 function addTask() {
     const taskInput = document.getElementById('task-input');
-    const task = taskInput.value.trim();
-    if (task) {
-        tasks.push(task);
+    const taskText = taskInput.value.trim();
+    if (taskText) {
+        tasks.push({ text: taskText, completed: false });
         taskInput.value = '';
+        renderTasks();
+    }
+}
+
+function markTaskComplete(index) {
+    tasks[index].completed = true;
+    renderTasks();
+}
+
+function editTask(index) {
+    const newTaskText = prompt('Edit task:', tasks[index].text);
+    if (newTaskText !== null) {
+        tasks[index].text = newTaskText.trim();
         renderTasks();
     }
 }
