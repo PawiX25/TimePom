@@ -5,19 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pomodoro Timer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            transition: background-color 0.5s ease;
+        }
+
+        .bg-work {
+            background-color: #f0f4f8;
+        }
+
+        .bg-break {
+            background-color: #e0f7fa;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="bg-work flex items-center justify-center h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg text-center">
         <h1 class="text-3xl font-bold mb-6">Pomodoro Timer</h1>
         <div id="timer" class="text-6xl font-mono mb-6">
             <span id="minutes">25</span>:<span id="seconds">00</span>
         </div>
         <div class="space-x-4">
-            <button id="start-btn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Start</button>
-            <button id="pause-btn" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Pause</button>
-            <button id="reset-btn" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Reset</button>
+            <button id="start-btn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600" aria-label="Start Timer">Start</button>
+            <button id="pause-btn" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600" aria-label="Pause Timer">Pause</button>
+            <button id="reset-btn" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" aria-label="Reset Timer">Reset</button>
         </div>
-        <div id="status" class="mt-4 text-xl text-gray-700">Work Session</div>
+        <div id="status" class="mt-4 text-xl text-gray-700" aria-live="polite">Work Session</div>
     </div>
     <script src="script.js"></script>
 </body>

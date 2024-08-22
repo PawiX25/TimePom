@@ -11,6 +11,17 @@ function formatTime(seconds) {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
+function updateVisualFeedback() {
+    const body = document.body;
+    if (onBreak) {
+        body.classList.remove('bg-work');
+        body.classList.add('bg-break');
+    } else {
+        body.classList.remove('bg-break');
+        body.classList.add('bg-work');
+    }
+}
+
 function updateTimer() {
     const minutesElem = document.getElementById('minutes');
     const secondsElem = document.getElementById('seconds');
@@ -23,6 +34,7 @@ function updateTimer() {
         timeRemaining = onBreak ? workDuration : breakDuration;
         onBreak = !onBreak;
         document.getElementById('status').textContent = onBreak ? 'Break Time!' : 'Work Session';
+        updateVisualFeedback();
         playAlert();
     }
 }
@@ -47,6 +59,8 @@ function resetTimer() {
     isRunning = false;
     timeRemaining = workDuration;
     document.getElementById('status').textContent = 'Work Session';
+    document.body.classList.remove('bg-break');
+    updateVisualFeedback();
     updateTimer();
 }
 
