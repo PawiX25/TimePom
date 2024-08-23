@@ -95,15 +95,14 @@ function updateDurations() {
     workDuration = workInput * 60;
     breakDuration = breakInput * 60;
     longBreakDuration = longBreakInput * 60;
-
+    
     if (!onBreak) {
         timeRemaining = workDuration;
-        updateTimer();
     } else {
-        timeRemaining = breakDuration;
-        updateTimer();
+        timeRemaining = onBreak && sessionsCompleted >= sessionsBeforeLongBreak ? longBreakDuration : breakDuration;
     }
 
+    updateTimer();
     clearError();
 }
 
@@ -220,7 +219,6 @@ function saveStatistics() {
 function loadStatistics() {
     totalWorkSessions = parseInt(localStorage.getItem('totalWorkSessions')) || 0;
     totalBreakTime = parseInt(localStorage.getItem('totalBreakTime')) || 0;
-    document.getElementById('long-break-time').value = longBreakDuration / 60; // Set the long break input value
     updateStatistics();
 }
 
@@ -235,6 +233,18 @@ document.getElementById('start-btn').addEventListener('click', startTimer);
 document.getElementById('pause-btn').addEventListener('click', pauseTimer);
 document.getElementById('reset-btn').addEventListener('click', resetTimer);
 document.getElementById('add-task-btn').addEventListener('click', addTask);
+
+document.getElementById('pomodoro-variation').addEventListener('change', (event) => {
+    const [workMinutes, breakMinutes] = event.target.value.split(':').map(Number);
+    workDuration = workMinutes * 60;
+    breakDuration = breakMinutes * 60;
+    if (!onBreak) {
+        timeRemaining = workDuration;
+    } else {
+        timeRemaining = onBreak && sessionsCompleted >= sessionsBeforeLongBreak ? longBreakDuration : breakDuration;
+    }
+    updateTimer();
+});
 
 document.addEventListener('keydown', (event) => {
     if (event.key === 's') { // 's' for Start
