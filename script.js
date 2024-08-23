@@ -9,6 +9,22 @@ let sessionsCompleted = 0;
 const sessionsBeforeLongBreak = 4;
 let tasks = [];
 
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+function playBeep() {
+    const beep = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    beep.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    beep.type = 'sine';
+    beep.frequency.setValueAtTime(440, audioContext.currentTime); 
+    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+    beep.start();
+    beep.stop(audioContext.currentTime + 0.5); 
+}
+
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -61,6 +77,7 @@ function updateTimer() {
         document.getElementById('status').textContent = sessionType;
         updateVisualFeedback();
         showNotification('Session Complete', sessionType);
+        playBeep();
     }
 
     updateProgressBar();
