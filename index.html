@@ -49,35 +49,35 @@
     <div class="bg-white p-8 rounded-xl shadow-lg text-center w-full max-w-lg">
         <h1 class="text-4xl font-extrabold text-gray-800 mb-8">Pomodoro Timer</h1>
         
-        <div id="error-message" class="hidden text-red-500 text-lg mb-4"></div>
+        <div id="error-message" class="hidden text-red-500 text-lg mb-4" aria-live="assertive"></div>
         
-        <div id="timer" class="text-7xl font-mono text-gray-900 mb-8">
+        <div id="timer" class="text-7xl font-mono text-gray-900 mb-8" aria-live="polite">
             <span id="minutes">25</span>:<span id="seconds">00</span>
         </div>
         <div class="progress-bar-container mb-8">
-            <div id="progress-bar" class="progress-bar"></div>
+            <div id="progress-bar" class="progress-bar" aria-live="polite"></div>
         </div>
         <div class="flex justify-center gap-4 mb-8">
-            <button id="start-btn" class="bg-green-500 text-white py-3 px-6 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" aria-label="Start Timer">Start</button>
-            <button id="pause-btn" class="bg-yellow-500 text-white py-3 px-6 rounded-lg shadow hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Pause Timer">Pause</button>
-            <button id="reset-btn" class="bg-red-500 text-white py-3 px-6 rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Reset Timer">Reset</button>
+            <button id="start-btn" class="bg-green-500 text-white py-3 px-6 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" aria-label="Start the Pomodoro timer">Start</button>
+            <button id="pause-btn" class="bg-yellow-500 text-white py-3 px-6 rounded-lg shadow hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Pause the Pomodoro timer">Pause</button>
+            <button id="reset-btn" class="bg-red-500 text-white py-3 px-6 rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Reset the Pomodoro timer">Reset</button>
         </div>
         <div id="input-container" class="mb-8">
             <div class="mb-6">
                 <label for="work-time" class="block text-lg font-medium text-gray-700 mb-2">Work Time (minutes):</label>
-                <input type="number" id="work-time" value="25" class="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" aria-label="Work Time">
+                <input type="number" id="work-time" value="25" class="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" aria-label="Set work time in minutes">
             </div>
             <div class="mb-6">
                 <label for="break-time" class="block text-lg font-medium text-gray-700 mb-2">Break Time (minutes):</label>
-                <input type="number" id="break-time" value="5" class="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" aria-label="Break Time">
+                <input type="number" id="break-time" value="5" class="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" aria-label="Set break time in minutes">
             </div>
         </div>
         <div id="status" class="mt-4 text-2xl text-gray-700" aria-live="polite">Work Session</div>
         
         <div id="statistics" class="mt-8 text-left">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Statistics</h2>
-            <p id="total-work-sessions" class="text-lg text-gray-700">Total Work Sessions: 0</p>
-            <p id="total-break-time" class="text-lg text-gray-700">Total Break Time: 00:00</p>
+            <p id="total-work-sessions" class="text-lg text-gray-700" aria-live="polite">Total Work Sessions: 0</p>
+            <p id="total-break-time" class="text-lg text-gray-700" aria-live="polite">Total Break Time: 00:00</p>
         </div>
 
         <div class="task-list mt-8 text-left">
@@ -85,8 +85,8 @@
             <ul id="task-list" class="list-disc pl-5 mb-4">
             </ul>
             <div class="flex gap-4">
-                <input type="text" id="task-input" class="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" placeholder="Add new task">
-                <button id="add-task-btn" class="bg-blue-500 text-white py-3 px-6 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Add Task</button>
+                <input type="text" id="task-input" class="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" placeholder="Add new task" aria-label="Task input field">
+                <button id="add-task-btn" class="bg-blue-500 text-white py-3 px-6 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" aria-label="Add new task">Add Task</button>
             </div>
         </div>
     </div>
