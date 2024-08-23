@@ -8,6 +8,8 @@ let onBreak = false;
 let sessionsCompleted = 0;
 const sessionsBeforeLongBreak = 4;
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let totalWorkSessions = 0;
+let totalBreakTime = 0; 
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -54,11 +56,14 @@ function updateTimer() {
 
         if (!onBreak) {
             sessionsCompleted++;
+            totalWorkSessions++;
             if (sessionsCompleted >= sessionsBeforeLongBreak) {
                 timeRemaining = longBreakDuration;
+                totalBreakTime += longBreakDuration;
                 sessionsCompleted = 0;
             } else {
                 timeRemaining = breakDuration;
+                totalBreakTime += breakDuration;
             }
             onBreak = true;
         } else {
@@ -70,6 +75,8 @@ function updateTimer() {
         updateVisualFeedback();
         showNotification('Session Complete', onBreak ? 'Break Time!' : 'Work Session');
         playBeep();
+        updateStatistics();
+        saveStatistics();
     }
 
     updateProgressBar();
@@ -194,10 +201,30 @@ function showNotification(title, message) {
     }
 }
 
+function updateStatistics() {
+    const workSessionsElem = document.getElementById('total-work-sessions');
+    const breakTimeElem = document.getElementById('total-break-time');
+
+    workSessionsElem.textContent = `Total Work Sessions: ${totalWorkSessions}`;
+    breakTimeElem.textContent = `Total Break Time: ${formatTime(totalBreakTime)}`;
+}
+
+function saveStatistics() {
+    localStorage.setItem('totalWorkSessions', totalWorkSessions);
+    localStorage.setItem('totalBreakTime', totalBreakTime);
+}
+
+function loadStatistics() {
+    totalWorkSessions = parseInt(localStorage.getItem('totalWorkSessions')) || 0;
+    totalBreakTime = parseInt(localStorage.getItem('totalBreakTime')) || 0;
+    updateStatistics();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     if (Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
+    loadStatistics();
 });
 
 document.getElementById('start-btn').addEventListener('click', startTimer);
