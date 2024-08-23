@@ -85,14 +85,17 @@ function updateTimer() {
 function updateDurations() {
     const workInput = parseInt(document.getElementById('work-time').value);
     const breakInput = parseInt(document.getElementById('break-time').value);
+    const longBreakInput = parseInt(document.getElementById('long-break-time').value);
 
-    if (isNaN(workInput) || isNaN(breakInput) || workInput <= 0 || breakInput <= 0) {
-        showError('Please enter valid positive numbers for both work and break times.');
+    if (isNaN(workInput) || isNaN(breakInput) || isNaN(longBreakInput) || workInput <= 0 || breakInput <= 0 || longBreakInput <= 0) {
+        showError('Please enter valid positive numbers for work, break, and long break times.');
         return;
     }
 
     workDuration = workInput * 60;
     breakDuration = breakInput * 60;
+    longBreakDuration = longBreakInput * 60;
+
     if (!onBreak) {
         timeRemaining = workDuration;
         updateTimer();
@@ -217,6 +220,7 @@ function saveStatistics() {
 function loadStatistics() {
     totalWorkSessions = parseInt(localStorage.getItem('totalWorkSessions')) || 0;
     totalBreakTime = parseInt(localStorage.getItem('totalBreakTime')) || 0;
+    document.getElementById('long-break-time').value = longBreakDuration / 60; // Set the long break input value
     updateStatistics();
 }
 
