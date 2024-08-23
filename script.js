@@ -9,7 +9,9 @@ let sessionsCompleted = 0;
 const sessionsBeforeLongBreak = 4;
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let totalWorkSessions = 0;
-let totalBreakTime = 0; 
+let totalBreakTime = 0;
+let totalFocusedTime = 0;
+let sessionStartTime = 0;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -57,6 +59,8 @@ function updateTimer() {
         if (!onBreak) {
             sessionsCompleted++;
             totalWorkSessions++;
+            totalFocusedTime += workDuration;
+
             if (sessionsCompleted >= sessionsBeforeLongBreak) {
                 timeRemaining = longBreakDuration;
                 totalBreakTime += longBreakDuration;
@@ -95,7 +99,7 @@ function updateDurations() {
     workDuration = workInput * 60;
     breakDuration = breakInput * 60;
     longBreakDuration = longBreakInput * 60;
-    
+
     if (!onBreak) {
         timeRemaining = workDuration;
     } else {
@@ -122,6 +126,7 @@ function startTimer() {
     if (!isRunning) {
         updateDurations();
         document.getElementById('input-container').classList.add('hidden');
+        sessionStartTime = Date.now(); 
         interval = setInterval(() => {
             timeRemaining--;
             updateTimer();
@@ -149,7 +154,7 @@ function resetTimer() {
 
 function renderTasks() {
     const taskList = document.getElementById('task-list');
-    taskList.innerHTML = ''; 
+    taskList.innerHTML = '';
     tasks.forEach((task, index) => {
         const li = document.createElement('li');
         li.className = 'flex items-center justify-between py-2 text-gray-800';
@@ -206,19 +211,25 @@ function showNotification(title, message) {
 function updateStatistics() {
     const workSessionsElem = document.getElementById('total-work-sessions');
     const breakTimeElem = document.getElementById('total-break-time');
+    const focusedTimeElem = document.getElementById('total-focused-time');
+    const averageSessionElem = document.getElementById('average-session-length');
 
     workSessionsElem.textContent = `Total Work Sessions: ${totalWorkSessions}`;
     breakTimeElem.textContent = `Total Break Time: ${formatTime(totalBreakTime)}`;
+    focusedTimeElem.textContent = `Total Focused Time: ${formatTime(totalFocusedTime)}`;
+    averageSessionElem.textContent = `Average Session Length: ${formatTime(totalFocusedTime / totalWorkSessions || 0)}`;
 }
 
 function saveStatistics() {
     localStorage.setItem('totalWorkSessions', totalWorkSessions);
     localStorage.setItem('totalBreakTime', totalBreakTime);
+    localStorage.setItem('totalFocusedTime', totalFocusedTime);
 }
 
 function loadStatistics() {
     totalWorkSessions = parseInt(localStorage.getItem('totalWorkSessions')) || 0;
     totalBreakTime = parseInt(localStorage.getItem('totalBreakTime')) || 0;
+    totalFocusedTime = parseInt(localStorage.getItem('totalFocusedTime')) || 0;
     updateStatistics();
 }
 
