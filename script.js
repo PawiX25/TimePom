@@ -7,7 +7,7 @@ let timeRemaining = workDuration;
 let onBreak = false;
 let sessionsCompleted = 0;
 const sessionsBeforeLongBreak = 4;
-let tasks = [];
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -19,10 +19,10 @@ function playBeep() {
     gainNode.connect(audioContext.destination);
 
     beep.type = 'sine';
-    beep.frequency.setValueAtTime(440, audioContext.currentTime); 
+    beep.frequency.setValueAtTime(440, audioContext.currentTime);
     gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
     beep.start();
-    beep.stop(audioContext.currentTime + 0.5); 
+    beep.stop(audioContext.currentTime + 0.5);
 }
 
 function formatTime(seconds) {
@@ -33,13 +33,8 @@ function formatTime(seconds) {
 
 function updateVisualFeedback() {
     const body = document.body;
-    if (onBreak) {
-        body.classList.remove('bg-work');
-        body.classList.add('bg-break');
-    } else {
-        body.classList.remove('bg-break');
-        body.classList.add('bg-work');
-    }
+    body.classList.toggle('bg-break', onBreak);
+    body.classList.toggle('bg-work', !onBreak);
 }
 
 function updateProgressBar() {
@@ -50,10 +45,8 @@ function updateProgressBar() {
 }
 
 function updateTimer() {
-    const minutesElem = document.getElementById('minutes');
-    const secondsElem = document.getElementById('seconds');
-    minutesElem.textContent = formatTime(timeRemaining).split(':')[0];
-    secondsElem.textContent = formatTime(timeRemaining).split(':')[1];
+    document.getElementById('minutes').textContent = formatTime(timeRemaining).split(':')[0];
+    document.getElementById('seconds').textContent = formatTime(timeRemaining).split(':')[1];
 
     if (timeRemaining <= 0) {
         clearInterval(interval);
@@ -63,7 +56,7 @@ function updateTimer() {
             sessionsCompleted++;
             if (sessionsCompleted >= sessionsBeforeLongBreak) {
                 timeRemaining = longBreakDuration;
-                sessionsCompleted = 0; // reset after long break
+                sessionsCompleted = 0;
             } else {
                 timeRemaining = breakDuration;
             }
@@ -73,10 +66,9 @@ function updateTimer() {
             onBreak = false;
         }
 
-        const sessionType = onBreak ? 'Break Time!' : 'Work Session';
-        document.getElementById('status').textContent = sessionType;
+        document.getElementById('status').textContent = onBreak ? 'Break Time!' : 'Work Session';
         updateVisualFeedback();
-        showNotification('Session Complete', sessionType);
+        showNotification('Session Complete', onBreak ? 'Break Time!' : 'Work Session');
         playBeep();
     }
 
@@ -84,16 +76,16 @@ function updateTimer() {
 }
 
 function updateDurations() {
-    const workInput = document.getElementById('work-time').value;
-    const breakInput = document.getElementById('break-time').value;
+    const workInput = parseInt(document.getElementById('work-time').value);
+    const breakInput = parseInt(document.getElementById('break-time').value);
 
     if (isNaN(workInput) || isNaN(breakInput) || workInput <= 0 || breakInput <= 0) {
         showError('Please enter valid positive numbers for both work and break times.');
         return;
     }
 
-    workDuration = parseInt(workInput) * 60;
-    breakDuration = parseInt(breakInput) * 60;
+    workDuration = workInput * 60;
+    breakDuration = breakInput * 60;
     if (!onBreak) {
         timeRemaining = workDuration;
         updateTimer();
@@ -169,6 +161,7 @@ function addTask() {
     const taskText = taskInput.value.trim();
     if (taskText) {
         tasks.push({ text: taskText, completed: false });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
         taskInput.value = '';
         renderTasks();
     }
@@ -176,6 +169,7 @@ function addTask() {
 
 function markTaskComplete(index) {
     tasks[index].completed = true;
+    localStorage.setItem('tasks', JSON.stringify(tasks));
     renderTasks();
 }
 
@@ -183,21 +177,20 @@ function editTask(index) {
     const newTaskText = prompt('Edit task:', tasks[index].text);
     if (newTaskText !== null) {
         tasks[index].text = newTaskText.trim();
+        localStorage.setItem('tasks', JSON.stringify(tasks));
         renderTasks();
     }
 }
 
 function removeTask(index) {
     tasks.splice(index, 1);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
     renderTasks();
 }
 
-
 function showNotification(title, message) {
     if (Notification.permission === 'granted') {
-        new Notification(title, {
-            body: message,
-        });
+        new Notification(title, { body: message });
     }
 }
 
@@ -212,5 +205,16 @@ document.getElementById('pause-btn').addEventListener('click', pauseTimer);
 document.getElementById('reset-btn').addEventListener('click', resetTimer);
 document.getElementById('add-task-btn').addEventListener('click', addTask);
 
+document.addEventListener('keydown', (event) => {
+    if (event.key === 's') { // 's' for Start
+        startTimer();
+    } else if (event.key === 'p') { // 'p' for Pause
+        pauseTimer();
+    } else if (event.key === 'r') { // 'r' for Reset
+        resetTimer();
+    } else if (event.key === 't' && document.activeElement === document.getElementById('task-input')) { // 't' for Add Task
+        addTask();
+    }
+});
 
 updateTimer();
