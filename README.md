@@ -2,6 +2,14 @@
 
 **TimePom** is a web-based Pomodoro Timer application designed to enhance your productivity using the Pomodoro Technique. This technique involves working in intervals, typically 25 minutes, followed by short breaks. TimePom provides a simple and intuitive interface to help you manage your time, tasks, and track your progress.
 
+## Live Demo
+
+You can see a live version of the project [here](https://timepom.pawix.tech/).
+
+## Screenshot
+
+![TimePom Screenshot](https://github.com/user-attachments/assets/d0cef076-15b4-4d46-af25-cc16b329b684)
+
 ## Features
 
 - **Customizable Timer**: Set your preferred work and break durations.
@@ -16,7 +24,7 @@
 - **style.css**: Embedded CSS within `index.html` to style the application.
 - **script.js**: The JavaScript file responsible for the timer functionality, task management, and UI updates.
 
-## How to use
+## How to Use
 
 ### Timer Controls
 
